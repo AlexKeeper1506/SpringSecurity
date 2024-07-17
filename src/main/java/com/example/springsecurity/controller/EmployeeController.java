@@ -24,10 +24,20 @@ public class EmployeeController {
         return "Welcome, Alex!";
     }
 
+    @GetMapping("/error")
+    public String errorMethod() {
+        return "error";
+    }
+
     @GetMapping("/default")
     public String defaultPage() {
         return "Default page!";
     }
+
+    /*@GetMapping("/error")
+    public String errorPage() {
+        return "Default page!";
+    }*/
 
     @GetMapping("/admin")
     public String welcomeAdmin() {

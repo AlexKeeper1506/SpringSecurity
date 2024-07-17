@@ -18,6 +18,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.firewall.*;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -81,14 +83,27 @@ public class SecurityConfiguration {
                         }
                 )
                 .httpFirewall(
-                new StrictHttpFirewall() {
-                    @Override
-                    public FirewalledRequest getFirewalledRequest(HttpServletRequest request) throws RequestRejectedException {
-                        System.out.println(request.getRequestURL());
-                        if (request.getRequestURL().toString().equals("http://localhost:8080/admin")) throw new RequestRejectedException("Test reason");
-                        return super.getFirewalledRequest(request);
-                    }
-                }
-        );
+                        new StrictHttpFirewall() {
+                            List<String> whiteList = List.of(
+                                    "http://localhost:8080/admin",
+                                    "http://localhost:8080/welcome",
+                                    "http://localhost:8080/login",
+                                    "http://localhost:8080/default",
+                                    "www.test.com"
+                            );
+
+                            @Override
+                            public FirewalledRequest getFirewalledRequest(HttpServletRequest request) throws RequestRejectedException {
+                                String referer = request.getHeader("referer");
+
+                                if (referer != null) {
+                                    System.out.println(referer);
+                                    if (!whiteList.contains(referer)) throw new RequestRejectedException("Test reason");
+                                }
+
+                                return super.getFirewalledRequest(request);
+                             }
+                        }
+                );
     }
 }
