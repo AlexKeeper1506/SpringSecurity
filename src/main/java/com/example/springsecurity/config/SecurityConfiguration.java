@@ -63,7 +63,6 @@ public class SecurityConfiguration {
                                 .requestMatchers("/**")
                                 .authenticated()
                 )
-                //.formLogin().disable()
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 /*.exceptionHandling(
                         c -> c.authenticationEntryPoint(
@@ -77,27 +76,19 @@ public class SecurityConfiguration {
     public WebSecurityCustomizer globalSecurity() {
         return web -> web
                 .requestRejectedHandler(
-                        //new HttpStatusRequestRejectedHandler()
                         (request, response, exception) -> {
-                            response.sendError(402, "Test message!");
+                            response.sendRedirect("/default");
                         }
                 )
                 .httpFirewall(
                 new StrictHttpFirewall() {
                     @Override
                     public FirewalledRequest getFirewalledRequest(HttpServletRequest request) throws RequestRejectedException {
-                        throw new RequestRejectedException("Test reason");
-                        //return super.getFirewalledRequest(request);
+                        System.out.println(request.getRequestURL());
+                        if (request.getRequestURL().toString().equals("http://localhost:8080/admin")) throw new RequestRejectedException("Test reason");
+                        return super.getFirewalledRequest(request);
                     }
                 }
         );
     }
-    /*@Bean
-    public HttpFirewall configureFirewall() {
-        StrictHttpFirewall strictHttpFirewall = new StrictHttpFirewall();
-        strictHttpFirewall.setAllowBackSlash(true);
-        strictHttpFirewall.setAllowedHttpMethods(Arrays.asList("GET", "POST", "DELETE", "OPTIONS"));
-        //strictHttpFirewall.setAllowedHeaderValues(x -> x.equals("https://www.test.com"));
-        return strictHttpFirewall;
-    }*/
 }
