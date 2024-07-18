@@ -66,11 +66,6 @@ public class SecurityConfiguration {
                                 .authenticated()
                 )
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
-                /*.exceptionHandling(
-                        c -> c.authenticationEntryPoint(
-                                (request, response, authException) -> {}
-                        )
-                )*/
                 .build();
     }
 
@@ -79,27 +74,39 @@ public class SecurityConfiguration {
         return web -> web
                 .requestRejectedHandler(
                         (request, response, exception) -> {
-                            response.sendRedirect("/default");
+                            response.sendRedirect("/banned_referer");
                         }
                 )
                 .httpFirewall(
                         new StrictHttpFirewall() {
-                            List<String> whiteList = List.of(
+                            final List<String> whiteList = List.of(
+                                    "http://localhost:8080",
+                                    "http://localhost:8080/",
+                                    "http://localhost:8080/login",
                                     "http://localhost:8080/admin",
                                     "http://localhost:8080/welcome",
-                                    "http://localhost:8080/login",
-                                    "http://localhost:8080/default",
-                                    "www.test.com"
+                                    "http://localhost:8080/foo",
+                                    "http://localhost:8080/banned_referer",
+                                    "http://localhost:8080/?continue",
+                                    "http://localhost:8080/login?continue",
+                                    "http://localhost:8080/admin?continue",
+                                    "http://localhost:8080/welcome?continue",
+                                    "http://localhost:8080/foo?continue",
+                                    "http://localhost:8080/banned_referer?continue",
+                                    "http://localhost:8080/login?error"
                             );
 
                             @Override
                             public FirewalledRequest getFirewalledRequest(HttpServletRequest request) throws RequestRejectedException {
+                                String url     = request.getRequestURL().toString();
                                 String referer = request.getHeader("referer");
 
-                                if (referer != null) {
-                                    System.out.println(referer);
-                                    if (!whiteList.contains(referer)) throw new RequestRejectedException("Test reason");
+                                System.out.println("URL = " + url);
+                                System.out.println("referer " + referer);
+                                if ((!url.equals("http://localhost:8080/banned_referer")) && (referer != null)) {
+                                    if (!whiteList.contains(referer)) throw new RequestRejectedException("The referer is not included in the white list!");
                                 }
+                                System.out.println();
 
                                 return super.getFirewalledRequest(request);
                              }

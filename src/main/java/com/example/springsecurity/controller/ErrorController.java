@@ -3,10 +3,10 @@ package com.example.springsecurity.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-/*@Controller
+@Controller
 public class ErrorController {
-    @GetMapping("/error")
-    public String errorMethod() {
-        return "error";
+    @GetMapping("/banned_referer")
+    public String errorPage() {
+        return "banned_referer";
     }
-}*/
+}
