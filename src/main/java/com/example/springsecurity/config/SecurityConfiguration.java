@@ -12,13 +12,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
@@ -34,29 +30,6 @@ import java.util.Map;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfiguration {
-    /*@Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder.encode("456"))
-                .roles("ADMIN")
-                .build();
-
-        UserDetails user = User.builder()
-                .username("user")
-                .password(passwordEncoder.encode("123"))
-                .roles("USER")
-                .build();
-
-        UserDetails alex = User.builder()
-                .username("alex")
-                .password(passwordEncoder.encode("789"))
-                .roles("ADMIN", "USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(admin, user, alex);
-    }*/
-
     @Bean
     public RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
@@ -108,8 +81,6 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers("/welcome")
-                                .permitAll()
-                                .requestMatchers("/create_users")
                                 .permitAll()
                                 .requestMatchers("/foo2")
                                 .permitAll()

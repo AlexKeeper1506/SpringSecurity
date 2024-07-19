@@ -49,5 +49,5 @@ VALUES
     );
 
 INSERT INTO authorities(username, authority)
-VALUES ('admin', 'PERMISSION_INDEX'),
-       ('user',  'PERMISSION_INDEX');
+VALUES ('admin', 'ROLE_ADMIN'),
+       ('user',  'ROLE_USER');

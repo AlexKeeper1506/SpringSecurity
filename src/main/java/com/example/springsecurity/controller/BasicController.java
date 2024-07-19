@@ -3,8 +3,6 @@ package com.example.springsecurity.controller;
 import com.example.springsecurity.user.TestUser;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.web.bind.annotation.*;
@@ -72,7 +70,7 @@ public class BasicController {
     }
 
     @GetMapping("/create_users")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public String createUsers() {
         try {
             final TestUser testUser = new TestUser(passwordEncoder);
