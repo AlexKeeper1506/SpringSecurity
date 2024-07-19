@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -25,13 +26,15 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.security.web.firewall.*;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfiguration {
-    @Bean
+    /*@Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails admin = User.builder()
                 .username("admin")
@@ -52,7 +55,7 @@ public class SecurityConfiguration {
                 .build();
 
         return new InMemoryUserDetailsManager(admin, user, alex);
-    }
+    }*/
 
     @Bean
     public RoleHierarchy roleHierarchy() {
@@ -76,7 +79,12 @@ public class SecurityConfiguration {
 
     @Bean
     public PasswordEncoder createDelegatingPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+        String encodingId = "bcrypt";
+        Map<String, PasswordEncoder> encoders = new HashMap<>();
+
+        encoders.put(encodingId, new BCryptPasswordEncoder());
+
+        return new DelegatingPasswordEncoder(encodingId, encoders);
     }
 
     @Bean
@@ -100,6 +108,10 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers("/welcome")
+                                .permitAll()
+                                .requestMatchers("/create_users")
+                                .permitAll()
+                                .requestMatchers("/foo2")
                                 .permitAll()
                                 .requestMatchers("/admin")
                                 .hasRole("ADMIN")
@@ -143,7 +155,8 @@ public class SecurityConfiguration {
                                     "http://localhost:8080/welcome?continue",
                                     "http://localhost:8080/foo?continue",
                                     "http://localhost:8080/banned_referer?continue",
-                                    "http://localhost:8080/login?error"
+                                    "http://localhost:8080/login?error",
+                                    "http://localhost:8080/create_users"
                             );
 
                             @Override

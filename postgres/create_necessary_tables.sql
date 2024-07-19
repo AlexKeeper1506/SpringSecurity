@@ -18,3 +18,36 @@ CREATE TABLE IF NOT EXISTS authorities(
 
 CREATE UNIQUE INDEX ix_auth_username
 ON authorities(username, authority);
+
+CREATE TABLE IF NOT EXISTS groups(
+    id         BIGINT NOT NULL PRIMARY KEY,
+    group_name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS group_authorities(
+    group_id  BIGINT NOT NULL REFERENCES groups(id),
+    authority VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS group_members(
+    id       BIGINT NOT NULL PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    group_id BIGINT NOT NULL REFERENCES groups(id)
+);
+
+INSERT INTO users(username, password, enabled)
+VALUES
+    (
+        'admin',
+        '{bcrypt}$2a$10$3QCbbXpTQoQmCLwul8AcKuIh/xly8xFZVr7HDk2rCTiuJKkHnUcM6',
+        true
+    ),
+    (
+        'user',
+        '{bcrypt}$2a$10$NjvaXm3ejL28gUGVcbxJVOAz/NIevnGQ1DJaeRGg7nZ5tZdC6sozu',
+        true
+    );
+
+INSERT INTO authorities(username, authority)
+VALUES ('admin', 'PERMISSION_INDEX'),
+       ('user',  'PERMISSION_INDEX');

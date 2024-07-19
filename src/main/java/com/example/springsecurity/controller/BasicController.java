@@ -1,10 +1,15 @@
 package com.example.springsecurity.controller;
 
+import com.example.springsecurity.user.TestUser;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
 
 @RestController
 public class BasicController {
@@ -61,9 +66,21 @@ public class BasicController {
         return "hello, " + operator;
     }
 
+    @GetMapping("/foo2")
+    public String foo2(@RequestParam String password) {
+        return passwordEncoder.encode(password);
+    }
+
     @GetMapping("/create_users")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public String createUsers() {
-        return "Hello!";
+        try {
+            final TestUser testUser = new TestUser(passwordEncoder);
+            System.out.println(testUser.getPassword());
+            userManager.createUser(testUser);
+            return "Success!";
+        } catch (Exception exception) {
+            return "Failure!";
+        }
     }
 }
