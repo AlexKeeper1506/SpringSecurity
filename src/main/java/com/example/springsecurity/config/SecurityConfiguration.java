@@ -66,6 +66,14 @@ public class SecurityConfiguration {
                                 .authenticated()
                 )
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .sessionManagement(
+                        sessionConfigurer -> sessionConfigurer
+                                .sessionConcurrency(
+                                        concurrencyConfigurer -> concurrencyConfigurer
+                                                .maximumSessions(1)
+                                                .maxSessionsPreventsLogin(true)
+                                )
+                )
                 .build();
     }
 
