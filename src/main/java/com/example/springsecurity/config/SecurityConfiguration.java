@@ -99,6 +99,14 @@ public class SecurityConfiguration {
                             rememberMe.key("0xCAFEBABE0xDEADBABE0xBA0BAB");
                         }
                 )
+                .sessionManagement(
+                        sessionConfigurer -> sessionConfigurer
+                                .sessionConcurrency(
+                                        concurrencyConfigurer -> concurrencyConfigurer
+                                                .maximumSessions(1)
+                                                .maxSessionsPreventsLogin(true)
+                                )
+                )
                 .build();
     }
 
