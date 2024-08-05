@@ -11,11 +11,11 @@ import java.util.Collection;
 import java.util.List;
 
 public class ManualImplementation {
-    public static final String OATH_REDIRECT_PATH = "/oath/authorize";
-    public static final String OATH_REDIRECT_URL = "http://localhost:8080" + OATH_REDIRECT_PATH;
-    public static final String VK_OATH_CLIENT_ID = "51466120";
-    public static final String VK_OATH_CLIENT_SECRET = "f4E984OWxfypUK0N7VZL";
-    public static final String OATH_SESSION_STATE_ATTRIB = "OATH2_STATE";
+    public static final String OAUTH_REDIRECT_PATH = "/oauth/authorize";
+    public static final String OAUTH_REDIRECT_URL = "http://localhost:8080" + OAUTH_REDIRECT_PATH;
+    public static final String VK_OAUTH_CLIENT_ID = "51466120";
+    public static final String VK_OAUTH_CLIENT_SECRET = "f4E9B4OHxfypUK0N7VZL";
+    public static final String OAUTH_SESSION_STATE_ATTRIB = "OAUTH2_STATE";
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class VkTokenResponse {

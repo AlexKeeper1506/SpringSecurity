@@ -21,7 +21,7 @@ import static com.example.springsecurity.oath2.ManualImplementation.*;
 
 @Configuration
 public class SpringImplConfiguration {
-    //@Bean
+    @Bean
     public SecurityFilterChain filterChainBuiltin(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(c -> c
@@ -31,14 +31,14 @@ public class SpringImplConfiguration {
                     c.clientRegistrationRepository(
                             new InMemoryClientRegistrationRepository(
                                     ClientRegistration.withRegistrationId("vk")
-                                            .clientId(VK_OATH_CLIENT_ID)
-                                            .clientSecret(VK_OATH_CLIENT_SECRET)
+                                            .clientId(VK_OAUTH_CLIENT_ID)
+                                            .clientSecret(VK_OAUTH_CLIENT_SECRET)
                                             .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
                                             .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                                            .redirectUri("{baseUrl}/login/oath2/code/{registrationId}")
+                                            .redirectUri("{baseUrl}/login/oauth2/code/{registrationId}")
                                             .scope("email")
-                                            .authorizationUri("https://oath.vk.com/authorize")
-                                            .tokenUri("https://oath.vk.com/access_token")
+                                            .authorizationUri("https://oauth.vk.com/authorize")
+                                            .tokenUri("https://oauth.vk.com/access_token")
                                             .userNameAttributeName("email")
                                             .clientName("Vk")
                                             .build()
@@ -49,7 +49,7 @@ public class SpringImplConfiguration {
                                 var client = codeGrantRequestData.getClientRegistration();
                                 var token = RestClient.create().get()
                                         .uri("""
-                                                https://oath.vk.com/access_token\
+                                                https://oauth.vk.com/access_token\
                                                 ?client_id=%s&client_secret=%s\
                                                 &redirect_uri=%s&code=%s"""
                                                 .formatted(
