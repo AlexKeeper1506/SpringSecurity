@@ -3,6 +3,7 @@ package com.example.springsecurity.controller;
 import com.example.springsecurity.user.TestUser;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.web.bind.annotation.*;
@@ -78,5 +79,10 @@ public class BasicController {
         } catch (Exception exception) {
             return "Failure!";
         }
+    }
+
+    @GetMapping("/info")
+    public String index(Authentication auth) {
+        return "You are logged in as " + auth;
     }
 }
