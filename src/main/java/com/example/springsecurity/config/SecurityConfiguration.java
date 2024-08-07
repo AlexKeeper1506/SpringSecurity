@@ -74,7 +74,7 @@ public class SecurityConfiguration {
         return tokenRepository;
     }
 
-    @Bean
+    //@Bean
     public SecurityFilterChain filterChain(HttpSecurity http, PersistentTokenRepository repository) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
