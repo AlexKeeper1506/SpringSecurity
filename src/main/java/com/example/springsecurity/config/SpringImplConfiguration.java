@@ -21,7 +21,7 @@ import static com.example.springsecurity.oath2.ManualImplementation.*;
 
 @Configuration
 public class SpringImplConfiguration {
-    @Bean
+    //@Bean
     public SecurityFilterChain filterChainBuiltin(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(c -> c
